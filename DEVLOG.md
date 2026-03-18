@@ -1,0 +1,38 @@
+# L-CIS 개발 일지
+
+## 📅 2026-03-18 (Day 1)
+
+### ✅ 오늘 한 것
+- Python 3.14 설치 및 환경 세팅
+- VSCode 설치 및 프로젝트 폴더 구성
+- 가상환경 (lcis-env) 생성
+- FastAPI, Uvicorn, Streamlit 패키지 설치
+- FastAPI 기본 서버 구현 (`app/main.py`)
+- 서버 정상 작동 확인 (`http://127.0.0.1:8000`)
+- API 문서 페이지 확인 (`http://127.0.0.1:8000/docs`)
+- Git 설치 및 GitHub 저장소 연결
+- 첫 커밋 & push 완료
+
+### 🗂️ 현재 프로젝트 구조
+```
+lcis/
+├── lcis-env/          # 가상환경 (GitHub에 올라가지 않음)
+└── app/
+    ├── routers/       # API 라우터 (예정)
+    ├── models/        # AI 모델 (예정)
+    ├── services/      # 비즈니스 로직 (예정)
+    ├── __init__.py
+    └── main.py        # FastAPI 서버 진입점
+```
+
+### 🔜 다음에 할 것
+- AST 분석 모듈 구현 (`app/services/ast_analyzer.py`)
+- Python 코드 입력 → 함수·변수·위험패턴 추출
+
+### 🐛 오늘 만난 문제들
+- Python 3.14 최신 버전이라 uvicorn 호환 오류 → 코드 들여쓰기 수정으로 해결
+- PowerShell 보안 정책으로 가상환경 활성화 오류 → Command Prompt로 전환해서 해결
+- Git push 시 README 충돌 → `--allow-unrelated-histories` 로 해결
+- vim 편집기에서 `:wq` 커밋 메시지에 포함되는 해프닝 😅
+
+---
