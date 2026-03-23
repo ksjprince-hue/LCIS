@@ -27,7 +27,7 @@ Python 코드를 입력받아 AST 구조 분석, AI 위험도 판단, LLM 설명
 | 기능 | 상태 |
 |---|---|
 | FastAPI 서버 기본 구조 | ✅ 완료 |
-| AST 코드 구조 분석 | 🔄 진행 예정 |
+| AST 코드 구조 분석 | ✅ 완료 |
 | PyTorch 위험도 모델 | 🔄 진행 예정 |
 | CodeBERT Transformer 분석 | 🔄 진행 예정 |
 | Attention 시각화 (XAI) | 🔄 진행 예정 |
