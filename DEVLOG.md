@@ -36,3 +36,36 @@ lcis/
 - vim 편집기에서 `:wq` 커밋 메시지에 포함되는 해프닝 😅
 
 ---
+
+## 📅 2026-03-23 (Day 2)
+
+### ✅ 오늘 한 것
+- AST 분석 모듈 구현 (`app/modules/ast_analyzer.py`)
+- FastAPI 라우터 연결 (`app/routers/analysis.py`)
+- 데이터 스키마 정의 (`app/models/schemas.py`)
+- Streamlit 프론트엔드 구현 (`app/frontend.py`)
+- 코드 입력 → AST 분석 → 결과 시각화 전체 흐름 완성
+
+### 🗂️ 현재 프로젝트 구조
+```
+lcis/
+└── app/
+    ├── models/
+    │   └── schemas.py       # 요청/응답 데이터 형태 정의
+    ├── modules/
+    │   └── ast_analyzer.py  # AST 분석 엔진
+    ├── routers/
+    │   └── analysis.py      # API 엔드포인트
+    ├── frontend.py          # Streamlit UI
+    └── main.py
+```
+
+### 🔜 다음에 할 것
+- 로컬 LLM 연결 (Ollama + DeepSeek-Coder)
+
+### 🐛 오늘 만난 문제들
+- 포트 충돌 (이전 uvicorn 프로세스 미종료) → `taskkill /f /im python.exe` 로 해결
+- `__init__.py` 누락으로 모듈 import 오류 → 각 폴더에 추가해서 해결
+- git push 충돌 → `git pull origin main --rebase` 로 해결
+
+---
