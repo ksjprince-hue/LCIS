@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from modules.ast_analyzer import ASTAnalyzer, FunctionData, ClassData
+from modules.llm_connector import analyze_with_llm
 from models.schemas import AnalyzeRequest, AnalyzeResponse, FunctionInfo, ClassInfo
 
 # APIRouter: FastAPI 앱을 기능별로 분리하는 도구
@@ -44,14 +45,17 @@ async def analyze_ast(req: AnalyzeRequest):
         raise HTTPException(status_code=400, detail="source_code가 비어있어요")
 
     # 분석 실행
-    result = analyzer.analyze(req.source_code)
+    ast_result = analyzer.analyze(req.source_code)
+
+    # AST 결과 + 원본 코드를 LLM한테 전달
+    llm_result = analyze_with_llm(req.source_code, ast_result)
 
     # ASTResult → AnalyzeResponse 변환해서 반환
     return AnalyzeResponse(
         filename=req.filename,
-        total_lines=result.total_lines,
-        complexity_score=result.complexity_score,
-        functions=[_to_function_info(f) for f in result.functions],
+        total_lines=ast_result.total_lines,
+        complexity_score=ast_result.complexity_score,
+        functions=[_to_function_info(f) for f in ast_result.functions],
         classes=[
             ClassInfo(
                 name=c.name,
@@ -59,8 +63,11 @@ async def analyze_ast(req: AnalyzeRequest):
                 bases=c.bases,
                 methods=[_to_function_info(m) for m in c.methods],
             )
-            for c in result.classes
+            for c in ast_result.classes
         ],
-        imports=result.imports,
-        errors=result.errors,
+        imports=ast_result.imports,
+        errors=ast_result.errors,
+        # LLM 결과 추가
+        llm_analysis=llm_result["response"] if llm_result["success"] else "",
+        llm_error=llm_result["error"] if not llm_result["success"] else "",
     )

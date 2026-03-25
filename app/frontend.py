@@ -72,6 +72,14 @@ if st.button("분석 시작"):
             else:
                 st.error(f"서버 오류: {response.status_code}")
 
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("llm_error"):
+                    st.error(f"LLM 분석 오류: {result['llm_error']}")
+                elif result.get("llm_analysis"):
+                    st.subheader("🤖 LLM 분석 결과")
+                    st.write(result["llm_analysis"])
         except requests.exceptions.ConnectionError:
             # FastAPI 서버가 꺼져있을 때
             st.error("FastAPI 서버에 연결할 수 없어요. 서버가 실행 중인지 확인해주세요!")
+            

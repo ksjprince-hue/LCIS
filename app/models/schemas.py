@@ -37,3 +37,5 @@ class AnalyzeResponse(BaseModel):
     classes: list[ClassInfo]
     imports: list[str]
     errors: list[str]
+    llm_analysis: str = ""   # LLM 분석 결과 텍스트
+    llm_error: str = ""      # LLM 오류 메시지 (있을 때만)

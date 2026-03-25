@@ -81,10 +81,16 @@ class ASTAnalyzer(ast.NodeVisitor):
             self.result.errors.append(f"SyntaxError {e.lineno}번째 줄: {e.msg}")
             return self.result
 
-        # 모든 함수 복잡도 합산
-        self.result.complexity_score = sum(
-            f.complexity for f in self.result.functions
+        #일반 함수 복잡도 합산
+        func_complexity = sum(f.complexity for f in self.result.functions)
+
+        #클래스 메서드 복잡도 합산
+        method_complexity = sum(
+            m.complexity
+            for c in self.result.classes
+            for m in c.methods
         )
+        self.result.complexity_score = func_complexity + method_complexity
         return self.result
 
     # ── Import 수집 ──────────────────────────────────────────
