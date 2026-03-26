@@ -31,9 +31,9 @@ Python 코드를 입력받아 AST 구조 분석, AI 위험도 판단, LLM 설명
 | PyTorch 위험도 모델 | 🔄 진행 예정 |
 | CodeBERT Transformer 분석 | 🔄 진행 예정 |
 | Attention 시각화 (XAI) | 🔄 진행 예정 |
-| LLM 코드 설명 생성 | 🔄 진행 예정 |
+| LLM 코드 설명 생성 | ✅ 완료 |
 | RAG 파이프라인 | 🔄 진행 예정 |
-| Streamlit UI | 🔄 진행 예정 |
+| Streamlit UI | ✅ 완료 |
 
 ## 시스템 아키텍처
 ```
