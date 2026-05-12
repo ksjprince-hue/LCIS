@@ -106,3 +106,70 @@ lcis/
 - LLM 결과 표시 코드 들여쓰기 오류 → 위치 수정으로 해결
 
 ---
+
+📅 2026-05-12 (Day 4)
+
+## ✅ 오늘 한 것
+
+* CodeXGLUE Defect Detection 데이터셋 적용
+* TF-IDF 기반 Baseline 취약점 분류 모델 구현
+* scikit-learn 기반 F1 / Accuracy 평가 파이프라인 구현
+* HuggingFace Transformers 설치 및 CodeBERT 환경 구성
+* CodeBERT Tokenizer 및 Embedding 구조 학습
+* PyTorch 기반 Transformer Fine-tuning 파이프라인 구현
+* HuggingFace Trainer 기반 학습/평가 코드 작성
+* 학습된 모델 checkpoint 저장 및 로드 구현
+* inference.py 구현
+* 코드 입력 기반 취약점 추론 시스템 구현
+
+---
+
+## 🗂️ 현재 AI 파이프라인
+
+Code Input
+→ Tokenizer
+→ CodeBERT Embedding
+→ Transformer Classification
+→ Vulnerability Prediction
+→ Confidence Score Output
+
+---
+
+## 📊 학습 결과
+
+| Model                | F1 Score |
+| -------------------- | -------- |
+| TF-IDF Baseline      | 0.53     |
+| CodeBERT Fine-tuning | 0.51     |
+
+* CPU 환경 + subset 기반 실험 진행
+* Epoch 증가에 따라 F1 성능 개선 확인
+* Fine-tuning 및 inference 전체 흐름 구현 완료
+
+---
+
+## 🔜 다음에 할 것
+
+* GPU 기반 Full Fine-tuning
+* CFG / DFG 구조 분석 실험
+* RAG 기반 취약점 근거 검색
+* Attention Visualization (XAI)
+
+---
+
+## 🐛 오늘 만난 문제들
+
+* HuggingFace label tensor 타입 오류
+  → bool → int 변환 후 해결
+
+* Trainer loss 반환 오류
+  → labels 컬럼 누락 문제 수정
+
+* CUDA 미지원 환경 오류
+  → CPU 기반 학습으로 전환
+
+* GitHub 대용량 checkpoint 추적 문제
+  → results/ 를 .gitignore 에 추가하여 해결
+
+* CodeBERT가 모든 코드를 Safe로 예측
+  → epoch 증가 후 F1 개선 확인
