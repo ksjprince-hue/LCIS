@@ -80,7 +80,8 @@ class ASTAnalyzer(ast.NodeVisitor):
             # 문법 오류 → 서버 죽으면 안 되니까 에러 기록하고 반환
             self.result.errors.append(f"SyntaxError {e.lineno}번째 줄: {e.msg}")
             return self.result
-
+        #전역 코드 복잡도 추가
+        global_complexity = self._calc_complexity(tree)
         #일반 함수 복잡도 합산
         func_complexity = sum(f.complexity for f in self.result.functions)
 
@@ -90,7 +91,7 @@ class ASTAnalyzer(ast.NodeVisitor):
             for c in self.result.classes
             for m in c.methods
         )
-        self.result.complexity_score = func_complexity + method_complexity
+        self.result.complexity_score = func_complexity + method_complexity+global_complexity
         return self.result
 
     # ── Import 수집 ──────────────────────────────────────────
