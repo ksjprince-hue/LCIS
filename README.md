@@ -45,3 +45,7 @@ Python 코드를 입력받아 AST 구조 분석, AI 위험도 판단, LLM 설명
 ## 개발 일지
 
 [DEVLOG.md](./DEVLOG.md) 참고
+
+## 📦 데이터셋
+- [CodeXGLUE Defect Detection](https://huggingface.co/datasets/google/code_x_glue_cc_defect_detection)
+- 학습 데이터만 공개 데이터셋 사용, 나머지는 자체 구현
