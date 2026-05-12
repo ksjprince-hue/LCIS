@@ -1,51 +1,144 @@
 # L-CIS (Local Code Intelligence System)
 
-> AI 기반 Python 코드 분석 시스템 — 구조 분석 · 위험도 판단 · 설명 생성
+Transformer 기반 AI 코드 취약점 분석 시스템
 
-![Python](https://img.shields.io/badge/Python-3.14-blue)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.1.0-green)
-![Status](https://img.shields.io/badge/Status-In%20Development-orange)
+---
 
-## 프로젝트 개요
+## Overview
 
-Python 코드를 입력받아 AST 구조 분석, AI 위험도 판단, LLM 설명 생성까지
-하나의 파이프라인으로 처리하는 End-to-End 코드 분석 시스템입니다.
+L-CIS는 C/C++ 및 Python 코드를 분석하여 취약 가능성을 탐지하고, AI 기반 코드 이해 및 설명 기능을 제공하는 로컬 기반 코드 인텔리전스 프로젝트입니다.
 
-## 기술 스택
+본 프로젝트에서는:
 
-| 분야 | 기술 |
-|---|---|
-| Backend | FastAPI, Uvicorn |
-| AI/ML | PyTorch, HuggingFace (CodeBERT) |
-| LLM | Ollama |
-| Vector DB | ChromaDB |
-| Parsing | Python AST, tree-sitter |
-| Frontend | Streamlit |
+* TF-IDF 기반 Baseline 모델 구축
+* CodeBERT Transformer Fine-tuning
+* PyTorch 기반 학습 파이프라인 구현
+* HuggingFace Trainer 활용
+* AST 기반 코드 구조 분석
+* Local LLM(Ollama) 기반 코드 설명 생성
 
-## 구현 현황
+등을 직접 구현하며 Transformer/LLM 기반 코드 분석 흐름을 학습했습니다.
 
-| 기능 | 상태 |
-|---|---|
-| FastAPI 서버 기본 구조 | ✅ 완료 |
-| AST 코드 구조 분석 | ✅ 완료 |
-| PyTorch 위험도 모델 | 🔄 진행 예정 |
-| CodeBERT Transformer 분석 | 🔄 진행 예정 |
-| Attention 시각화 (XAI) | 🔄 진행 예정 |
-| LLM 코드 설명 생성 | ✅ 완료 |
-| RAG 파이프라인 | 🔄 진행 예정 |
-| Streamlit UI | ✅ 완료 |
+---
 
-## 시스템 아키텍처
-```
-코드 입력 → AST 분석 → PyTorch 위험도 판단
-→ CodeBERT 의미 분석 → LLM 설명 생성
-→ RAG 근거 보강 → Attention 시각화 → 결과 출력
-```
+## Tech Stack
 
-## 개발 일지
+| 분야            | 기술                         |
+| ------------- | -------------------------- |
+| Language      | Python                     |
+| Deep Learning | PyTorch                    |
+| Transformer   | CodeBERT                   |
+| LLM Framework | HuggingFace Transformers   |
+| Local LLM     | Ollama                     |
+| ML Baseline   | scikit-learn               |
+| Parsing       | Python AST                 |
+| Backend       | FastAPI                    |
+| Frontend      | Streamlit                  |
+| Vector DB     | ChromaDB                   |
+| Dataset       | CodeXGLUE Defect Detection |
 
-[DEVLOG.md](./DEVLOG.md) 참고
+---
 
-## 📦 데이터셋
-- [CodeXGLUE Defect Detection](https://huggingface.co/datasets/google/code_x_glue_cc_defect_detection)
-- 학습 데이터만 공개 데이터셋 사용, 나머지는 자체 구현
+## System Pipeline
+
+Code Input
+→ AST Structure Analysis
+→ TF-IDF Baseline Classification
+→ CodeBERT Semantic Analysis
+→ Vulnerability Prediction
+→ Local LLM Explanation Generation
+→ Result Visualization
+
+---
+
+## Implemented Features
+
+| Feature                        | Status |
+| ------------------------------ | ------ |
+| TF-IDF Baseline Model          | ✅      |
+| CodeBERT Fine-tuning           | ✅      |
+| HuggingFace Trainer Pipeline   | ✅      |
+| Vulnerability Classification   | ✅      |
+| F1 / Accuracy Evaluation       | ✅      |
+| Inference Prediction           | ✅      |
+| AST Analysis (Python)          | ✅      |
+| Local LLM Integration (Ollama) | ✅      |
+| Streamlit UI                   | ✅      |
+| FastAPI Backend                | ✅      |
+| RAG Pipeline                   | 🔄     |
+| CFG / DFG Structural Analysis  | 🔄     |
+| Attention Visualization (XAI)  | 🔄     |
+
+---
+
+## AI/Transformer Training
+
+### Baseline Model
+
+* TF-IDF Vectorization
+* Logistic Regression
+* scikit-learn 기반 분류 모델
+
+### Transformer Model
+
+* microsoft/codebert-base
+* HuggingFace Trainer 기반 Fine-tuning
+* Sequence Classification 방식 적용
+
+Pipeline:
+Code → Tokenizer → Embedding → Transformer → Classification
+
+---
+
+## Training Result
+
+| Model                | F1 Score | Environment          |
+| -------------------- | -------- | -------------------- |
+| TF-IDF Baseline      | 0.53     | CPU                  |
+| CodeBERT Fine-tuning | 0.51     | CPU, subset training |
+
+Additional large-scale GPU fine-tuning and structural analysis integration are planned for future improvements.
+
+---
+
+## Key Learnings
+
+본 프로젝트를 통해 다음과 같은 경험을 수행했습니다.
+
+* Transformer 기반 코드 임베딩 이해
+* HuggingFace 기반 Fine-tuning 경험
+* Tokenization / Embedding / Logits / Loss 분석
+* PyTorch 기반 학습 및 평가 파이프라인 구현
+* Baseline ML 모델과 Transformer 모델 성능 비교
+* 코드 분석 AI 시스템 구조 설계 경험
+* Local LLM 기반 코드 설명 생성 경험
+
+---
+
+## Dataset
+
+### CodeXGLUE Defect Detection
+
+* C/C++ 함수 단위 취약점 데이터셋
+* Vulnerability Label (0 / 1) 제공
+* CodeBERT Fine-tuning 학습에 활용
+
+Dataset:
+https://huggingface.co/datasets/google/code_x_glue_cc_defect_detection
+
+---
+
+## Future Improvements
+
+* GPU 기반 Full Fine-tuning
+* CFG / DFG 기반 구조 분석
+* tree-sitter 기반 다중 언어 AST 지원
+* RAG 기반 취약점 근거 검색
+* Attention Visualization 기반 Explainable AI
+
+---
+
+## Author
+
+GitHub:
+https://github.com/ksjprince-hue/LCIS
