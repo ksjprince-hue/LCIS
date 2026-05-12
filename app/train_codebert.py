@@ -1,7 +1,12 @@
 # 상단에 추가
 import torch
+
 print(f"GPU 사용 가능: {torch.cuda.is_available()}")
-print(f"GPU 이름: {torch.cuda.get_device_name(0)}")
+
+if torch.cuda.is_available():
+    print(f"GPU 이름: {torch.cuda.get_device_name(0)}")
+else:
+    print("CPU 사용 중")
 from datasets import load_dataset
 from transformers import (
     AutoTokenizer,
@@ -18,7 +23,9 @@ from sklearn.metrics import accuracy_score, f1_score
 # =========================
 
 dataset = load_dataset("google/code_x_glue_cc_defect_detection")
-
+# 데이터 일부만 사용 (속도 개선)
+dataset["train"] = dataset["train"].select(range(3000))
+dataset["validation"] = dataset["validation"].select(range(500))
 # =========================
 # 2. tokenizer 로드
 # =========================
@@ -37,7 +44,7 @@ def tokenize_function(example):
         example["func"],
         truncation=True,
         padding="max_length",
-        max_length=256
+        max_length=128
     )
 
     # bool -> int
@@ -97,7 +104,7 @@ training_args = TrainingArguments(
 
     per_device_eval_batch_size=8,
 
-    num_train_epochs=1,
+    num_train_epochs=3,
 
     logging_dir="./logs",
 
