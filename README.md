@@ -17,7 +17,7 @@ L-CIS는 C/C++ 및 Python 코드를 분석하여 취약 가능성을 탐지하�
 * AST 기반 코드 구조 분석
 * Local LLM(Ollama) 기반 코드 설명 생성
 
-등을 직접 구현하며 Transformer/LLM 기반 코드 분석 흐름을 학습했습니다.
+등을 직접 구현하며 Transformer 기반 코드 분석 및 inference pipeline을 실험했습니다.
 
 ---
 
@@ -43,11 +43,12 @@ L-CIS는 C/C++ 및 Python 코드를 분석하여 취약 가능성을 탐지하�
 
 Code Input
 → AST Structure Analysis
-→ TF-IDF Baseline Classification
-→ CodeBERT Semantic Analysis
+→ Transformer Semantic Analysis (CodeBERT)
 → Vulnerability Prediction
-→ Local LLM Explanation Generation
+→ Local LLM Explanation
 → Result Visualization
+
+TF-IDF baseline model used for comparison experiments
 
 ---
 
@@ -92,12 +93,32 @@ Code → Tokenizer → Embedding → Transformer → Classification
 
 ## Training Result
 
-| Model                | F1 Score | Environment          |
-| -------------------- | -------- | -------------------- |
-| TF-IDF Baseline      | 0.53     | CPU                  |
-| CodeBERT Fine-tuning | 0.51     | CPU, subset training |
+| Model                | F1 Score | Environment           |
+| -------------------- | -------- | --------------------  | 
+| TF-IDF Baseline      | 0.53     | CPU                   |
+| CodeBERT (Best Validation Checkpoint) | 0.63     | CPU subset fine-tuning |
 
 Additional large-scale GPU fine-tuning and structural analysis integration are planned for future improvements.
+
+Notes
+* Fine-tuning performed using PyTorch and HuggingFace Transformers
+* Validation-based checkpoint evaluation applied
+* Best performance observed around checkpoint-6000
+* Additional GPU-based large-scale training planned
+
+## Inference Example
+
+Input Code:
+
+```c
+char buf[10];
+strcpy(buf, input);
+```
+
+Prediction:
+
+* Vulnerable Code
+* Confidence Score: 0.50
 
 ---
 
