@@ -1,15 +1,9 @@
 import torch
 
-print(f"GPU 사용 가능: {torch.cuda.is_available()}")
-
 if torch.cuda.is_available():
     print(f"GPU 이름: {torch.cuda.get_device_name(0)}")
-<<<<<<< HEAD
 else:
     print("CPU 사용 중")
-=======
-
->>>>>>> ab2faff (feat: add CodeBERT inference and checkpoint evaluation)
 from datasets import load_dataset
 
 from transformers import (
@@ -131,11 +125,7 @@ training_args = TrainingArguments(
 
     per_device_eval_batch_size=4,
 
-<<<<<<< HEAD
-    num_train_epochs=3,
-=======
     num_train_epochs=5,
->>>>>>> ab2faff (feat: add CodeBERT inference and checkpoint evaluation)
 
     logging_dir="./logs",
 
@@ -171,10 +161,6 @@ trainer.train()
 
 results = trainer.evaluate()
 
-<<<<<<< HEAD
-print(results)
-=======
 print("\n=== Final Evaluation ===")
 
 print(results)
->>>>>>> ab2faff (feat: add CodeBERT inference and checkpoint evaluation)
