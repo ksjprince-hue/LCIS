@@ -1,20 +1,29 @@
-from transformers import AutoTokenizer, AutoModel
+from transformers import (
+    AutoTokenizer,
+    AutoModelForSequenceClassification
+)
+
 import torch
 
-# CodeBERT 모델 이름
-MODEL_NAME = "microsoft/codebert-base"
+MODEL_NAME = "./results/checkpoint-6000"
 
-# tokenizer 불러오기
+# tokenizer
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
-# 모델 불러오기
-model = AutoModel.from_pretrained(MODEL_NAME)
+# classification model
+model = AutoModelForSequenceClassification.from_pretrained(
+    MODEL_NAME
+)
 
-# 테스트용 C 코드
+# 테스트 코드
 code = """
+#include <stdio.h>
+
 int main() {
-    char buf[10];
-    strcpy(buf, input);
+    char password[4];
+
+    scanf("%s", password);
+
     return 0;
 }
 """
@@ -28,15 +37,25 @@ inputs = tokenizer(
     max_length=512
 )
 
-print("=== Tokenized Input ===")
-print(inputs)
-
-# embedding 추출
+# prediction
 with torch.no_grad():
+
     outputs = model(**inputs)
 
-# 마지막 hidden state
-embeddings = outputs.last_hidden_state
+# logits
+logits = outputs.logits
 
-print("\n=== Embedding Shape ===")
-print(embeddings.shape)
+# softmax
+probs = torch.softmax(logits, dim=-1)
+
+prediction = torch.argmax(probs, dim=-1)
+
+print("=== Prediction Result ===")
+
+print("Prediction:", prediction.item())
+
+print("Confidence:", probs.max().item())
+
+print("Logits:", logits)
+
+print("Probabilities:", probs)

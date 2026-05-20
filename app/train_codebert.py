@@ -1,13 +1,17 @@
-# 상단에 추가
 import torch
 
 print(f"GPU 사용 가능: {torch.cuda.is_available()}")
 
 if torch.cuda.is_available():
     print(f"GPU 이름: {torch.cuda.get_device_name(0)}")
+<<<<<<< HEAD
 else:
     print("CPU 사용 중")
+=======
+
+>>>>>>> ab2faff (feat: add CodeBERT inference and checkpoint evaluation)
 from datasets import load_dataset
+
 from transformers import (
     AutoTokenizer,
     AutoModelForSequenceClassification,
@@ -16,13 +20,20 @@ from transformers import (
 )
 
 import numpy as np
-from sklearn.metrics import accuracy_score, f1_score
+
+from sklearn.metrics import (
+    accuracy_score,
+    f1_score
+)
 
 # =========================
 # 1. 데이터셋 로드
 # =========================
 
-dataset = load_dataset("google/code_x_glue_cc_defect_detection")
+dataset = load_dataset(
+    "google/code_x_glue_cc_defect_detection"
+)
+
 # 데이터 일부만 사용 (속도 개선)
 dataset["train"] = dataset["train"].select(range(3000))
 dataset["validation"] = dataset["validation"].select(range(500))
@@ -52,17 +63,31 @@ def tokenize_function(example):
 
     return tokens
 
+# =========================
+# 4. 데이터 tokenize
+# =========================
 
-# 데이터 tokenize
 tokenized_dataset = dataset.map(tokenize_function)
 
-# PyTorch tensor 형식 지정
+# =========================
+# 5. tensor 형식 변환
+# =========================
+
 tokenized_dataset.set_format(
     type="torch",
     columns=["input_ids", "attention_mask", "labels"]
 )
+
 # =========================
-# 4. 모델 로드
+# 6. subset 구성
+# =========================
+
+train_dataset = tokenized_dataset["train"].select(range(6000))
+
+validation_dataset = tokenized_dataset["validation"].select(range(1000))
+
+# =========================
+# 7. 모델 로드
 # =========================
 
 model = AutoModelForSequenceClassification.from_pretrained(
@@ -72,7 +97,7 @@ model = AutoModelForSequenceClassification.from_pretrained(
 )
 
 # =========================
-# 5. 평가 함수
+# 8. 평가 함수
 # =========================
 
 def compute_metrics(eval_pred):
@@ -82,6 +107,7 @@ def compute_metrics(eval_pred):
     predictions = np.argmax(logits, axis=-1)
 
     acc = accuracy_score(labels, predictions)
+
     f1 = f1_score(labels, predictions)
 
     return {
@@ -90,21 +116,26 @@ def compute_metrics(eval_pred):
     }
 
 # =========================
-# 6. 학습 설정
+# 9. 학습 설정
 # =========================
 
 training_args = TrainingArguments(
+
     output_dir="./results",
 
     eval_strategy="epoch",
 
     save_strategy="epoch",
 
-    per_device_train_batch_size=8,
+    per_device_train_batch_size=4,
 
-    per_device_eval_batch_size=8,
+    per_device_eval_batch_size=4,
 
+<<<<<<< HEAD
     num_train_epochs=3,
+=======
+    num_train_epochs=5,
+>>>>>>> ab2faff (feat: add CodeBERT inference and checkpoint evaluation)
 
     logging_dir="./logs",
 
@@ -112,31 +143,38 @@ training_args = TrainingArguments(
 )
 
 # =========================
-# 7. Trainer 생성
+# 10. Trainer 생성
 # =========================
 
 trainer = Trainer(
+
     model=model,
 
     args=training_args,
 
-    train_dataset=tokenized_dataset["train"],
+    train_dataset=train_dataset,
 
-    eval_dataset=tokenized_dataset["validation"],
+    eval_dataset=validation_dataset,
 
     compute_metrics=compute_metrics
 )
 
 # =========================
-# 8. 학습 시작
+# 11. 학습 시작
 # =========================
 
 trainer.train()
 
 # =========================
-# 9. 평가
+# 12. 최종 평가
 # =========================
 
 results = trainer.evaluate()
 
+<<<<<<< HEAD
 print(results)
+=======
+print("\n=== Final Evaluation ===")
+
+print(results)
+>>>>>>> ab2faff (feat: add CodeBERT inference and checkpoint evaluation)
