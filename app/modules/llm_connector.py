@@ -5,7 +5,6 @@ import requests
 from modules.ast_analyzer import ASTResult
 
 # Ollama 서버 주소
-# Ollama 설치하면 자동으로 이 주소로 서버가 떠요
 OLLAMA_URL = "http://localhost:11434/api/generate"
 MODEL_NAME = "deepseek-coder:1.3b"  # 나중에 더 큰 모델로 바꿀 때 여기만 수정
 
@@ -13,8 +12,7 @@ MODEL_NAME = "deepseek-coder:1.3b"  # 나중에 더 큰 모델로 바꿀 때 여
 def build_prompt(source_code: str, ast_result: ASTResult) -> str:
     """
     AST 분석 결과 + 원본 코드를 프롬프트로 가공하는 함수
-    LLM한테 보내는 입력 텍스트를 만들어요
-    구조화된 프롬프트일수록 답변 품질이 높아져요
+
     """
 
     # AST 결과에서 주요 정보 추출

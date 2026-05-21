@@ -8,8 +8,7 @@ from models.schemas import AnalyzeRequest, AnalyzeResponse, FunctionInfo, ClassI
 # tags=["analysis"]  → Swagger UI에서 그룹으로 묶여서 표시됨
 router = APIRouter(prefix="/analysis", tags=["analysis"])
 
-# 서버 시작할 때 한 번만 생성
-# 요청마다 새로 만들면 메모리 낭비라서
+# 서버 시작할 때 한 번만 생성(메모리 낭비 방지)
 analyzer = ASTAnalyzer()
 
 

@@ -1,26 +1,15 @@
 import ast
-# Python 내장 모듈, 설치 불필요
-# 코드 문자열을 트리 구조로 변환해줘요
+# 코드 문자열을 트리 구조로 변환
 
 import textwrap
 # 들여쓰기 정규화 도구
-# 코드 앞에 불필요한 공백이 있으면 ast.parse가 에러를 내요
-# textwrap.dedent()로 제거해요
-# 예: "    def foo():" → "def foo():"
 
 from dataclasses import dataclass, field
 # dataclass: 데이터 담는 클래스를 간단하게 만드는 문법
-# __init__ 직접 안 써도 돼요
-#
-# field(default_factory=list):
-# 리스트를 기본값으로 쓸 때 반드시 이렇게 써야 해요
-# 그냥 [] 쓰면 모든 인스턴스가 같은 리스트 공유하는 버그 생겨요
 
-
-# ── 내부 데이터 구조 ──────────────────────────────────────
+# ── 내부 데이터 구조 ─────────────────────────────────────────── 
 # schemas.py는 FastAPI 응답용 (외부로 내보내는 형태)
 # 여기 dataclass는 분석기 내부에서만 쓰는 형태
-# 역할 분리 → 나중에 수정하기 편해요
 
 @dataclass
 class FunctionData:
@@ -48,9 +37,6 @@ class ASTResult:
 
 
 # ── 분석기 본체 ───────────────────────────────────────────
-# ast.NodeVisitor 상속받아요
-# 이게 Visitor 패턴의 핵심
-# → visit_XXX 정의하면 해당 노드 만날 때 자동 호출
 
 class ASTAnalyzer(ast.NodeVisitor):
 
@@ -73,7 +59,7 @@ class ASTAnalyzer(ast.NodeVisitor):
             tree = ast.parse(textwrap.dedent(source_code))
 
             # 트리 순회 시작
-            # 이 한 줄이 visit_XXX들을 전부 자동 호출해요
+            # 이 한 줄이 visit_XXX들을 전부 자동 호출
             self.visit(tree)
 
         except SyntaxError as e:
@@ -102,7 +88,6 @@ class ASTAnalyzer(ast.NodeVisitor):
             self.result.imports.append(alias.name)
 
         # generic_visit: 자식 노드 계속 순회
-        # 빠뜨리면 이 노드 아래는 탐색 안 해요
         self.generic_visit(node)
 
     def visit_ImportFrom(self, node: ast.ImportFrom) -> None:
@@ -175,8 +160,8 @@ class ASTAnalyzer(ast.NodeVisitor):
         """
         Cyclomatic Complexity (순환 복잡도)
 
-        분기가 많을수록 코드가 복잡하고 버그가 숨기 쉬워요
-        분기 노드 개수 + 1 로 계산해요
+        분기가 많을수록 코드가 복잡하고 버그가 숨기 쉬움
+        분기 노드 개수 + 1 로 계산
 
         분기 없는 함수  → 복잡도 1
         if 하나        → 복잡도 2
