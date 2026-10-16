@@ -1,3 +1,4 @@
+from modules.model_config import get_codebert_model_path
 from transformers import (
     AutoTokenizer,
     AutoModelForSequenceClassification
@@ -5,7 +6,7 @@ from transformers import (
 
 import torch
 
-MODEL_NAME = "./results/checkpoint-6000"
+MODEL_NAME = get_codebert_model_path("./results/checkpoint-6000")
 
 # tokenizer
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)

@@ -29,8 +29,15 @@ dataset = load_dataset(
 )
 
 # 데이터 일부만 사용 (속도 개선)
-dataset["train"] = dataset["train"].select(range(3000))
-dataset["validation"] = dataset["validation"].select(range(500))
+TRAIN_SAMPLE_SIZE = 3000
+VALIDATION_SAMPLE_SIZE = 500
+
+dataset["train"] = dataset["train"].select(
+    range(min(TRAIN_SAMPLE_SIZE, len(dataset["train"])))
+)
+dataset["validation"] = dataset["validation"].select(
+    range(min(VALIDATION_SAMPLE_SIZE, len(dataset["validation"])))
+)
 # =========================
 # 2. tokenizer 로드
 # =========================
@@ -76,9 +83,9 @@ tokenized_dataset.set_format(
 # 6. subset 구성
 # =========================
 
-train_dataset = tokenized_dataset["train"].select(range(6000))
+train_dataset = tokenized_dataset["train"]
 
-validation_dataset = tokenized_dataset["validation"].select(range(1000))
+validation_dataset = tokenized_dataset["validation"]
 
 # =========================
 # 7. 모델 로드

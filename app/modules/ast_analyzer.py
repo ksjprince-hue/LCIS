@@ -66,7 +66,7 @@ class ASTAnalyzer(ast.NodeVisitor):
             # 문법 오류 → 서버 죽으면 안 되니까 에러 기록하고 반환
             self.result.errors.append(f"SyntaxError {e.lineno}번째 줄: {e.msg}")
             return self.result
-        #전역 코드 복잡도 추가
+        # 함수와 클래스 내부를 제외한 전역 코드 복잡도 추가
         global_complexity = self._calc_complexity(tree)
         #일반 함수 복잡도 합산
         func_complexity = sum(f.complexity for f in self.result.functions)
@@ -77,7 +77,9 @@ class ASTAnalyzer(ast.NodeVisitor):
             for c in self.result.classes
             for m in c.methods
         )
-        self.result.complexity_score = func_complexity + method_complexity+global_complexity
+        self.result.complexity_score = (
+            global_complexity + func_complexity + method_complexity
+        )
         return self.result
 
     # ── Import 수집 ──────────────────────────────────────────
@@ -171,6 +173,35 @@ class ASTAnalyzer(ast.NodeVisitor):
             ast.If, ast.For, ast.While,
             ast.ExceptHandler, ast.With, ast.BoolOp,
         )
-        # ast.walk: 노드 아래 모든 자식을 평탄하게 순회
-        count = sum(1 for n in ast.walk(node) if isinstance(n, branch_nodes))
-        return count + 1
+
+        class ScopeComplexityVisitor(ast.NodeVisitor):
+            """현재 스코프의 분기만 세고 중첩 스코프는 건너뛴다."""
+
+            def __init__(self, root: ast.AST):
+                self.root = root
+                self.count = 0
+
+            def generic_visit(self, current: ast.AST) -> None:
+                if isinstance(current, branch_nodes):
+                    self.count += 1
+                super().generic_visit(current)
+
+            def _visit_function_scope(
+                self,
+                current: ast.FunctionDef | ast.AsyncFunctionDef,
+            ) -> None:
+                if current is self.root:
+                    for statement in current.body:
+                        self.visit(statement)
+
+            visit_FunctionDef = _visit_function_scope
+            visit_AsyncFunctionDef = _visit_function_scope
+
+            def visit_ClassDef(self, current: ast.ClassDef) -> None:
+                if current is self.root:
+                    for statement in current.body:
+                        self.visit(statement)
+
+        visitor = ScopeComplexityVisitor(node)
+        visitor.visit(node)
+        return visitor.count + 1

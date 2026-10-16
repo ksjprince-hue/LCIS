@@ -86,6 +86,9 @@ TF-IDF baseline model used for comparison experiments
 * HuggingFace Trainer 기반 Fine-tuning
 * Sequence Classification 방식 적용
 
+저장된 체크포인트로 추론할 때는 `CODEBERT_MODEL_PATH` 환경변수로 모델 경로를 지정할 수 있습니다.
+환경변수가 없으면 각 실험 스크립트의 기존 기본 경로를 사용합니다.
+
 Pipeline:
 Code → Tokenizer → Embedding → Transformer → Classification
 
@@ -146,6 +149,14 @@ Prediction:
 
 Dataset:
 https://huggingface.co/datasets/google/code_x_glue_cc_defect_detection
+
+## Development Checks
+
+```bash
+python -m pytest
+```
+
+테스트는 모델 체크포인트나 Ollama 없이 AST 분석기와 FastAPI 응답 호환성을 검증합니다.
 
 ---
 
