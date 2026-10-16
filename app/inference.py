@@ -1,6 +1,7 @@
 import torch
 import torch.nn.functional as F
 
+from modules.model_config import get_codebert_model_path
 from transformers import (
     AutoTokenizer,
     AutoModelForSequenceClassification
@@ -10,7 +11,7 @@ from transformers import (
 # 1. 저장된 모델 불러오기
 # =========================
 
-MODEL_PATH = "./results/checkpoint-1125"
+MODEL_PATH = get_codebert_model_path("./results/checkpoint-1125")
 
 tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
 
